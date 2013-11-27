@@ -20,7 +20,7 @@ var _ = require( 'underscore' );
     if( startUpper ){
       var uppers = _( starts ).filter( function( word ){
         var c = word[ 0 ];
-        return isNaN( c * 1 ) && c === c.toUpperCase();
+        return /[A-Z]/.test( c );
       });
       if( uppers.length > 0 ){
         starts = uppers;

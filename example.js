@@ -5,6 +5,5 @@ fs.readFile( './pg76.txt', 'utf-8', function( err, text ){
   if( err ) throw err;
   
   var chain = new ChainOfFoo( text );
-  console.log( chain.generate() );
+  console.log( chain.generate( 20, true ) );
 });
-
