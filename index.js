@@ -9,18 +9,51 @@ var _ = require( 'underscore' );
     this.map = map( this.words );
   }
 
+  var seperator = '\u241E';
+  var regexs = {
+    uppercase: /[A-Z]/,
+    word: /[\w\']+/,
+    toBeFollowedBySpace: /[\.\?\),:!;%]/,
+    seperatorOrWhitespace: new RegExp( seperator + '|\s' ),
+    terminator: /[\.\?!]/
+  };
+  
+  _.mixin({
+    flatMap: function( obj, iterator, context ){
+      return _( obj ).chain().map( iterator, context ).flatten().value();
+    },
+    isWord: function( value ){
+      return regexs.word.test( value );
+    },
+    setFlags: function( regex, flags ){
+      return new RegExp( regex.source, flags );
+    },
+    capture: function( regex, flags ){
+      return new RegExp( '(' + regex.source + ')', flags );
+    },
+    spaceAfterPunctuation: function( value ){
+      return value.replace( _( regexs.toBeFollowedBySpace ).setFlags( 'g' ), function( c ){ 
+        return c + ' '; 
+      });
+    },
+    spaceBeforePunctuation: function( value ){
+      return value.replace( /\(/g, ' (' );
+    }
+  });
+  
   ChainOfFoo.prototype.generate = function( length, startUpper, endOnPunc ){    
     length = length || 50;
     length = length < 1 ? 1 : length;
+    var self = this;
     var chain = '';
     var last;
     
-    var starts = _( this.map ).keys();
+    var starts = _( self.map ).keys();
     
     if( startUpper ){
       var uppers = _( starts ).filter( function( word ){
         var c = word[ 0 ];
-        return /[A-Z]/.test( c );
+        return regexs.uppercase.test( c );
       });
       if( uppers.length > 0 ){
         starts = uppers;
@@ -31,40 +64,72 @@ var _ = require( 'underscore' );
     
     chain += current;
     length--;
-    while( length > 0 ){
-      var nexts = this.map[ current ];
-      if( _( nexts ).isArray() ){      
+    
+    var hasEnded = false;
+    
+    while( !hasEnded ){
+      length--;
+      var atEnd = length < 1;
+      var nexts = self.map[ current ];
+      if( _( nexts ).isArray() && nexts.length > 0 ){              
         current = _( nexts ).sample();
-        chain += ( /[\w\']+/.test( current ) && /[\w\']+/.test( last ) ? ' ' : '' ) + current;
+        //if we should be ending, if possible bias the selection 
+        //towards words that are near the end of a sentence.
+        if( atEnd && endOnPunc ){          
+          //try to only get the nexts that are terminators
+          var possible = _( nexts ).filter( function( next ){
+            return regexs.terminator.test( next );
+          });
+          
+          //maybe none of the nexts were terminators?
+          if( possible.length === 0 ){
+            //see if any of the nexts themselves have terminator children
+            possible = _( nexts ).filter( function( next ){
+              return _( self.map[ next ] ).filter( function( next ){
+                return regexs.terminator.test( next );
+              });
+            });
+          }
+          
+          //only if we have a terminator or a child with a terminator
+          if( possible.length > 0 ){
+            current = _( possible ).sample();
+          }
+        } 
+        
+        chain += ( _( current ).isWord() && _( last ).isWord() ? ' ' : '' ) + current;
         last = current;
       }      
-      length--;
+      
+      if( endOnPunc ){
+        hasEnded = atEnd && regexs.terminator.test( current );
+      } else {
+        hasEnded = atEnd;
+      }
     }
-    return chain.replace( /[\.\?\),:!;%]/g, function( c ){ return c + ' '; } ).replace( /\(/g, ' (' );
+    return _( chain ).chain().spaceAfterPunctuation().spaceBeforePunctuation().value();
   };
 
-  var seperator = '\u241E';
+  
   
   function split( text ){
-    var seperated = text.replace( /[\w\']+/g, function( word ){
-      return word + '\u241E';
+    var seperated = text.replace( _( regexs.word ).setFlags( 'g' ), function( word ){
+      return word + seperator;
     });
     
-    var split = seperated.split( /\u241E|\s/ );
-    
+    var split = seperated.split( /\u241E|\s/ );    
     return ( 
-      _( split ).chain()
-      .map( function( word ){
-        return word.split( /([\w\']+)/g );
+      _( split )
+      .chain()
+      .flatMap( function( word ){
+        return word.split( _( regexs.word ).capture( 'g' ) );
       })
-      .flatten()
-      .map( function( word ){
-        if( /[\w\']+/.test( word ) ){
+      .flatMap( function( word ){
+        if( _( word ).isWord() ){
           return word;
         }
         return word.split( '' );
       })
-      .flatten()
       .filter( function( word ){
         return word !== '';
       })

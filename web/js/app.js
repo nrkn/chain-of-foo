@@ -18,14 +18,14 @@ $( function(){
     
     var current = $('.tabs-content .active textarea').val();
     var startOnUpper = $( '#startOnUpper' ).prop( 'checked' );
-    
+    var endOnPunc = $( '#endOnPunc' ).prop( 'checked' );
     if( current !== input ){
       chain = new ChainOfFoo( current );
       input = current;
     };
     
     if( input.length > 1 ){
-      $( '#output' ).text( chain.generate( length, startOnUpper ) );
+      $( '#output' ).text( chain.generate( length, startOnUpper, endOnPunc ) );
     }
     return false;
   });
