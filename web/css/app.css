@@ -1,0 +1,12 @@
+textarea {
+  height: 10em;
+}
+
+.tabs-content .content.active {
+  width: 100%;
+}
+
+.tabs-content p {
+  height: 8em;
+  overflow: auto;
+}

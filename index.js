@@ -9,12 +9,26 @@ var _ = require( 'underscore' );
     this.map = map( this.words );
   }
 
-  ChainOfFoo.prototype.generate = function( length ){    
+  ChainOfFoo.prototype.generate = function( length, startUpper, endOnPunc ){    
     length = length || 50;
     length = length < 1 ? 1 : length;
     var chain = '';
     var last;
-    var current = _( this.map ).chain().keys().sample().value();
+    
+    var starts = _( this.map ).keys();
+    
+    if( startUpper ){
+      var uppers = _( starts ).filter( function( word ){
+        var c = word[ 0 ];
+        return isNaN( c * 1 ) && c === c.toUpperCase();
+      });
+      if( uppers.length > 0 ){
+        starts = uppers;
+      }
+    }
+    
+    var current = _( starts ).sample();
+    
     chain += current;
     length--;
     while( length > 0 ){
@@ -26,7 +40,7 @@ var _ = require( 'underscore' );
       }      
       length--;
     }
-    return chain.replace( /[\.\?,:!;]/g, function( c ){ return c + ' '; } );
+    return chain.replace( /[\.\?\),:!;%]/g, function( c ){ return c + ' '; } ).replace( /\(/g, ' (' );
   };
 
   var seperator = '\u241E';
@@ -61,7 +75,7 @@ var _ = require( 'underscore' );
   function map( words ){
     var mapping = {};
     _( words ).each( function( word, i ){
-      if( i < words.length - 2 ){
+      if( i < words.length - 1 ){
         var next = words[ i + 1 ];
         if( !_( mapping ).has( word ) ){
           mapping[ word ] = [ next ];

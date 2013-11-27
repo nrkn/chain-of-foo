@@ -1,0 +1,107 @@
+<!doctype html>
+<!--[if IE 9]><html class="lt-ie10" lang="en" > <![endif]-->
+<!--[if gt IE 9]><!-->
+<html lang="en">
+<!--<![endif]-->
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Chain of foo</title>
+    <link rel="stylesheet" href="css/normalize.css" />
+    <link rel="stylesheet" href="css/foundation.css" />
+    <link rel="stylesheet" href="css/app.css" />
+    <script src="js/vendor/custom.modernizr.js"></script>
+  </head>  
+  <body>
+    <div class="row">
+      <h1>Chain of Foo</h1>
+      <p>
+        Random text generation using Markov chains.
+      </p>
+      <h2>Input</h2>
+      <form>
+        <dl class="tabs" data-tab>
+          <dd class="active"><a href="#direct-input">Direct Input</a></dd>
+          <dd><a href="#file-input">File Upload</a></dd>
+          <dd><a href="#url-input">URL</a></dd>
+        </dl>
+        <div class="tabs-content">
+          <div class="content active" id="direct-input">
+            <fieldset>
+              <legend>Input Text</legend>            
+              <textarea id="input" placeholder="Enter input text..."></textarea>
+            </fieldset>
+          </div>          
+          <div class="content" id="file-input">
+            <input type="file" id="file" />
+            <fieldset>
+              <legend>Input Text</legend>
+              <p></p>
+            </fieldset>            
+          </div>
+          <div class="content" id="url-input">            
+            <div class="row collapse">
+              <div class="small-10 columns">
+                <input type="url" id="url" placeholder="Enter your URL..." />
+              </div>
+              <div class="small-2 columns">
+                <a href="#" class="button postfix">Load</a>
+              </div>
+            </div>            
+            <fieldset>
+              <legend>Input Text</legend>
+              <p></p>
+            </fieldset>            
+          </div>
+        </div>  
+        <fieldset>
+          <legend>Options</legend>
+          <div class="row">
+            <div class="large-6 columns">
+              <div class="row">
+                <div class="small-2 columns">
+                  <label for="length" class="inline">Length</label>
+                </div>
+                <div class="small-10 columns">
+                  <input id="length" type="number" min="1" max="10000" step="1" value="50" />
+                </div>
+              </div>
+            </div>
+            <div class="large-6 columns">
+              <div class="row">                
+                <input id="startOnUpper" type="checkbox" checked /><label for="startOnUpper" class="inline">Start with capital letter</label>
+              </div>
+            </div>
+          </div>
+        </fieldset>
+        <input id="generate" class="button" type="button" value="Generate" />
+      </form>
+      <h2>Output</h2>
+      <p id="output"></p>
+    </div>
+    <script src="js/vendor/jquery.js"></script>
+    <script src="js/foundation.min.js"></script>
+    <script src="chain-of-foo.js"></script>
+    <script>
+      $( document ).foundation();
+      
+      $( function(){     
+        var input, chain;
+        $( '#generate' ).click( function(){
+          var length = $( '#length' ).val() || 50;
+          var current = $( '#input' ).val();
+          var startOnUpper = $( '#startOnUpper' ).prop( 'checked' );
+          if( current !== input ){
+            chain = new ChainOfFoo( current );
+            input = current;
+          };
+          
+          if( input.length > 1 ){
+            $( '#output' ).text( chain.generate( length, startOnUpper ) );
+          }
+          return false;
+        });
+      });
+    </script>
+  </body>
+</html>  
