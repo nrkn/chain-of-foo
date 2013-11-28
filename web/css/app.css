@@ -25,10 +25,13 @@ footer {
   color: #000;
 }
 
-#loading h1 {
+#loading .progress-region {
   display: inline-block;
   margin: 0;
   padding: 0;
+}
+
+#loading h1 {
   color: #999;
 }
 
