@@ -38,3 +38,12 @@ footer {
 #output span {
   color: #ccc;
 }
+
+img {
+  max-width: 100%;
+  height: auto;  
+}
+
+header {
+  padding-left: 1em;
+}
