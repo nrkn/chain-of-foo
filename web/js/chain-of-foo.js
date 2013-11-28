@@ -69,10 +69,8 @@ var _ = require( 'underscore' );
     length--;
     
     var hasEnded = false;
-    
-    while( !hasEnded ){
-      length--;
-      var atEnd = length < 1;
+    var atEnd = false;
+    while( !hasEnded ){            
       var nexts = self.map[ current ];
       if( _( nexts ).isArray() && nexts.length > 0 ){              
         current = _( nexts ).sample();
@@ -102,6 +100,10 @@ var _ = require( 'underscore' );
         
         chain += ( _( current ).isWord() && _( last ).isWord() ? ' ' : '' ) + current;
         last = current;
+        if( _( current ).isWord() ){
+          length--;
+        }        
+        atEnd = length < 1;
       }      
       
       if( endOnPunc ){

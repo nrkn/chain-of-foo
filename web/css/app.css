@@ -1,12 +1,37 @@
 textarea {
-  height: 10em;
+  height: 15em;
 }
 
 .tabs-content .content.active {
   width: 100%;
 }
 
-.tabs-content p {
-  height: 8em;
-  overflow: auto;
+footer {
+  border-top: 1px solid #ccc;
+  padding-top: 1em;
+}
+
+.viewport {
+  position: relative;
+}
+
+#loading {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba( 255, 255, 255, 0.9 );
+  color: #000;
+}
+
+#loading h1 {
+  display: inline-block;
+  margin: 0;
+  padding: 0;
+  color: #999;
+}
+
+#output span {
+  color: #ccc;
 }
