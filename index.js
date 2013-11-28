@@ -3,10 +3,12 @@ var _ = require( 'underscore' );
 (function(){
   'use strict';
   
-  function ChainOfFoo( text ){
+  function ChainOfFoo( text, depth ){
+    depth = depth || 1;
     this.text = text;
     this.words = split( text );
-    this.map = map( this.words );
+    this.depth = depth;
+    this.map = map( this.words, depth );
   }
 
   var seperator = '\u241E';
@@ -139,7 +141,7 @@ var _ = require( 'underscore' );
     );
   }
   
-  function map( words ){
+  function map( words, depth ){
     var mapping = {};
     _( words ).each( function( word, i ){
       if( i < words.length - 1 ){
@@ -151,6 +153,31 @@ var _ = require( 'underscore' );
         }
       }
     });
+    
+    return mapping;    
+  }
+  
+  function multiMap( words, depth ){
+    var mapping = {};
+    _( words ).each( function( word, i ){
+      var prefix = [];
+      for( var j = 0; j < depth; j++ ){
+        var index = i + j;
+        if( index < words.length - 1 ){
+          prefix.push( words[ index ] );
+        }
+      }
+      var identifier = prefix.join( seperator );
+      if( i < words.length - 1 ){
+        var next = words[ i + depth ];        
+        if( !_( mapping ).has( identifier ) ){
+          mapping[ identifier ] = [ next ];
+        } else {
+          mapping[ identifier ].push( next );
+        }        
+      }
+    });
+    
     return mapping;
   }
   
