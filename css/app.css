@@ -1,0 +1,49 @@
+textarea {
+  height: 15em;
+}
+
+.tabs-content .content.active {
+  width: 100%;
+}
+
+footer {
+  border-top: 1px solid #ccc;
+  padding-top: 1em;
+}
+
+.viewport {
+  position: relative;
+}
+
+#loading {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba( 255, 255, 255, 0.9 );
+  color: #000;
+}
+
+#loading .progress-region {
+  display: inline-block;
+  margin: 0;
+  padding: 0;
+}
+
+#loading h1 {
+  color: #999;
+}
+
+#output span {
+  color: #ccc;
+}
+
+img {
+  max-width: 100%;
+  height: auto;  
+}
+
+header {
+  padding-left: 1em;
+}

@@ -1,0 +1,107 @@
+<!doctype html>
+<!--[if IE 9]><html class="lt-ie10" lang="en" > <![endif]-->
+<!--[if gt IE 9]><!-->
+<html lang="en">
+<!--<![endif]-->
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Chain of foo</title>
+    <link rel="stylesheet" href="css/normalize.css" />
+    <link rel="stylesheet" href="css/foundation.css" />
+    <link rel="stylesheet" href="css/app.css" />
+    <script src="js/vendor/custom.modernizr.js"></script>
+  </head>  
+  <body>
+    <div class="row collapse">
+      <div class="large-2 columns">
+        <img src="img/monkey.jpg" alt="" />
+      </div>
+      <div class="large-10 columns">
+        <header>
+          <h1>Chain of Foo</h1>
+          <p>
+            Random text generation using Markov chains.
+          </p>
+        </header>
+      </div>
+    </div>
+    <div class="row viewport">      
+      <form data-abide>
+        <div class="row">
+          <div class="large-8 columns">
+            <h2>Input</h2>            
+            <textarea id="input" placeholder="Enter input text..." required></textarea>
+            <input type="file" id="file" />
+          </div>
+          <div class="large-4 columns">
+            <h2>Options</h2>
+            <div class="row">
+              <div class="large-12 columns">
+                <label for="length">
+                  <span data-tooltip class="has-tip" title="Approximate number of words">Length <small>required</small></span>
+                </label>
+              </div>
+              <div class="large-10 columns left">
+                <input id="length" type="number" min="5" max="1000" step="1" value="15" data-default="15" required />
+                <small class="error">Length is required and must be a number between 1 and 1000.</small>
+              </div>
+            </div> 
+            <div class="row">
+              <div class="large-12 columns">
+                <label for="depth">
+                  <span data-tooltip class="has-tip" title="A higher depth value will make more sense, but also be less random">Depth <small>required</small></span>
+                </label>
+              </div>
+              <div class="large-10 columns left">
+                <input id="depth" type="number" min="1" max="5" step="1" value="2" data-default="2" required />
+                <small class="error">Depth is required and must be a number between 1 and 5.</small>
+              </div>
+            </div>             
+            <div class="row">    
+              <div class="large-12 columns">            
+                <input id="startOnUpper" type="checkbox" checked /><label for="startOnUpper" class="inline">Start with capital letter</label>
+              </div>
+            </div>    
+            <div class="row">                
+              <div class="large-12 columns">            
+                <input id="endOnPunc" type="checkbox" checked /><label for="endOnPunc" class="inline">End last sentence cleanly</label>
+              </div>
+            </div> 
+          </div>
+        </div>
+        <ul class="button-group">
+          <li><a href="#" id="load" class="button">Load from file</a></li>
+          <li><a href="#" id="sample" class="button">Load sample</a></li>
+          <li><a href="#" id="clear" class="button">Clear</a></li>
+          <li><a href="#" id="generate" class="button success">Generate new text</a></li>
+        </ul>
+      </form>
+      <h2>Output</h2>
+      <p id="output">
+        <span>Click "Generate new text"</span>
+      </p>
+      <div id="loading">
+        <div class="progress-region"> 
+          <h1 class="success">Loading&hellip;</h1>
+          <div class="progress">
+            <span class="meter"></span>
+          </div>
+        </div>
+      </div>          
+    </div>
+    <div class="row">
+      <footer>
+        By <a href="mailto:nik.coughlin@informationage.co.nz">Nik Coughlin</a>, 
+        <a href="http://informationage.co.nz">Information Age Ltd</a>.
+        Sample text from <a href="http://gutenberg.org/">Project Gutenberg</a>.
+      </footer>
+    </div>
+    <a href="https://github.com/nrkn/chain-of-foo"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_green_007200.png" alt="Fork me on GitHub"></a>
+    <script src="js/vendor/jquery.js"></script>
+    <script src="js/vendor/setImmediate.js"></script>
+    <script src="js/foundation.min.js"></script>
+    <script src="js/chain-of-foo.js"></script>
+    <script src="js/app.js"></script>
+  </body>
+</html>  
