@@ -2,7 +2,7 @@
 
 a simple markov chain random text generator
 
-[Demo](http://chain-of-foo.ia.net.nz)
+[Demo](http://nrkn.github.io/chain-of-foo/)
 
 ## license
 MIT
