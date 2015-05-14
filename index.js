@@ -3,7 +3,7 @@ var _ = require( 'underscore' );
 (function(){
   'use strict';
   
-  function ChainOfFoo( text, depth, callback, progress, corpus ){
+  function ChainOfFoo( text, depth, callback, progress, corpus, append ){
     depth = depth || 1;
     
     var self = this;
@@ -42,12 +42,13 @@ var _ = require( 'underscore' );
     this.words = split( text );
     end( 'split' );
     
-    if( corpus ){
-      this.map = corpus;
+    this.map = corpus || {};
+    
+    if( corpus && !append ){
       callback( this );
-      return;
-    }
-    this.mapCorpus();
+    } else {
+      this.mapCorpus();
+    }    
   }
 
   var seperator = '\u241E';
@@ -217,7 +218,7 @@ var _ = require( 'underscore' );
 
   ChainOfFoo.prototype.mapCorpus = function(){
     var context = this;
-    var mapping = {};
+    var mapping = context.map;
     
     var timerId;
     var i = 0;
